@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "open-sorcerer"
+version = "0.1.0"
+description = "Detects prompt injection, PII leakage, and unsafe outputs in AI applications."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = []
+keywords = ["ai-security", "prompt-injection", "llm", "security", "llm-security"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Security",
+    "Intended Audience :: Developers",
+]
+
+[project.urls]
+Homepage = "https://github.com/jusot99/open-sorcerer"
+Source = "https://github.com/jusot99/open-sorcerer"
+
+[project.optional-dependencies]
+openai = ["openai>=1.0"]
+langchain = ["langchain-core>=0.1"]
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.16,<0.17",
+    "mypy>=1.9",
+    "regex>=2023.0",
+    "PyYAML>=6.0",
+    "types-PyYAML>=6.0",
+    "rich>=13.0",
+]
+
+[project.scripts]
+open-sorcerer = "open_sorcerer.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["open_sorcerer*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

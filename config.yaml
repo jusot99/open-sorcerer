@@ -1,0 +1,48 @@
+# open-sorcerer configuration
+# YAML-driven so security policy is reviewable as code.
+#
+# v0.1 detectors: prompt_injection + canary + anomaly + behavior + pii.
+
+detectors:
+  prompt_injection:
+    enabled: true
+    params:
+      threshold: 0.0       # flag on any finding (detect -> block posture)
+      normalize_encoding: true
+      max_depth: 4
+      semantic: true        # semantic-evasion scoring against reworded attacks
+      semantic_floor: 3     # min matching concepts before an intent fires
+      extra_patterns: {}
+    # YAML alternative: inline seed patterns (merged with built-in bank)
+    # patterns:
+    #   - "my custom pattern"
+    encoding_normalization: true
+    canary_check: true
+
+  canary:
+    enabled: true
+    params:
+      token_length: 32
+
+  anomaly:
+    enabled: true
+    params:
+      require_weak_static: true
+
+  behavior:
+    enabled: true
+    params:
+      max_flagged: 5
+      window_seconds: 60.0
+      max_sessions: 10000
+      max_rate: 30.0
+
+  pii:
+    enabled: true
+    params:
+      threshold: 0.0       # flag on any finding (detect -> block posture)
+
+pipeline:
+  mode: "sequential"
+  fail_fast: true
+
