@@ -2,12 +2,12 @@
 
 Detects prompt injection, PII/secrets, and system-prompt leakage before
 they reach a model or downstream service. Output sanitization is on the
-v0.2 roadmap.
+v0.3 roadmap.
 
 ## What it does
 
 open-sorcerer runs a chain of detectors over text input to a model. Each detector is
-built against a corpus of known bypasses and ships only when it catches them.
+tested against known attack patterns before it ships.
 The pipeline is fail-fast: the first HIGH/CRITICAL finding stops further
 scanning and the call is blocked. Every decision is written to a structured
 audit log.
@@ -82,7 +82,7 @@ from open_sorcerer.detectors import PromptInjectionDetector
 from open_sorcerer.integrations.openai import DetectorAdapter
 
 detector = PromptInjectionDetector()
-adapted = DetectorAdapter(detector)   # bridges Jusot's detector to A07's wrapper
+adapted = DetectorAdapter(detector)
 
 client = SecureOpenAI(
     OpenAI(),
@@ -180,16 +180,13 @@ Items without a mapped component are not covered by v0.1.
 ```bash
 ruff check .               # lint
 mypy open_sorcerer tests/  # types
-pytest tests/ -q           # unit + adversarial + semantic-evasion suites
+pytest tests/ -q           # unit + integration suites
 ```
 
-The adversarial suites are the recall gate. `tests/adversarial/test_bypass_corpus.py`
-loads the bypass corpus and asserts every `block` case is caught and every
-`allow` case stays clean. `tests/adversarial/test_semantic_evasion.py` does the
-same for reworded (signature-bypassing) attacks and near-miss benign queries.
-`tests/adversarial/test_benign_precision.py` guards precision: ordinary traffic
-may flag at LOW/MEDIUM but must never produce a block that would drop a
-legitimate request.
+`tests/unit/` covers each detector and the normalizer in isolation.
+`tests/integration/test_openai.py` checks the OpenAI wrapper with fakes.
+Releases additionally pass a private adversarial recall gate (bypass corpus,
+mutation regressions, benign precision) before they ship.
 
 ## Roadmap
 
