@@ -15,3 +15,9 @@ try:
     __all__ += ["DetectorAdapter", "SecureOpenAI"]
 except ImportError:
     pass
+
+try:
+    from .integrations.langchain import SecureRunnable
+    __all__ += ["SecureRunnable"]
+except ImportError:
+    pass
