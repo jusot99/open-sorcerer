@@ -38,7 +38,7 @@ Detection layers:
 ## Install
 
 ```bash
-pip install -e .
+pip install -e ".[dev]"
 ```
 
 Runtime has zero hard dependencies. `regex` (optional) enables hard timeouts on
@@ -183,8 +183,8 @@ mypy open_sorcerer tests/  # types
 pytest tests/ -q           # unit + integration suites
 ```
 
-`tests/unit/` covers each detector and the normalizer in isolation.
-`tests/integration/test_openai.py` checks the OpenAI wrapper with fakes.
+`tests/unit/` covers each detector, the normalizer, and the CLI.
+`tests/integration/` checks the OpenAI and LangChain wrappers with fakes.
 Releases additionally pass a private adversarial recall gate (bypass corpus,
 mutation regressions, benign precision) before they ship.
 
@@ -193,7 +193,7 @@ mutation regressions, benign precision) before they ship.
 | Version | Focus |
 |---------|-------|
 | v0.1 | Core detector + normalization + semantic scoring + OpenAI wrapper + CI |
-| v0.2 | LangChain wrapper + PII normalization (obfuscation resistance) + more integrations |
+| v0.2 | PII normalization (obfuscation resistance) + more integrations |
 | v0.3 | Output sanitizer (Markdown/HTML) + token limiter |
 | v1.0 | RAG poisoning detector + FastAPI deployment |
 
