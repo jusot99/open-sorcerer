@@ -33,6 +33,7 @@ dev = [
     "PyYAML>=6.0",
     "types-PyYAML>=6.0",
     "rich>=13.0",
+    "langchain-core>=0.1",
 ]
 
 [project.scripts]
