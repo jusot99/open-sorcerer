@@ -41,10 +41,16 @@ Detection layers:
 pip install -e ".[dev]"
 ```
 
-Runtime has zero hard dependencies. `regex` (optional) enables hard timeouts on
-signature matching. Without it, stdlib matching runs untimed, with input
-length as the only guard. `rich` is used by the CLI. `PyYAML` is used to read
-`config.yaml`.
+Runtime depends on `rich` (CLI output) and `PyYAML` (config files). `regex` is
+optional and only enables hard timeouts on signature matching. Without it,
+stdlib matching runs untimed, with input length as the only guard.
+
+The reference policy ships with the package as `open_sorcerer/config.yaml`. Pass
+it with `--config`:
+
+```bash
+open-sorcerer scan --config "$(python -c 'import open_sorcerer, pathlib; print(pathlib.Path(open_sorcerer.__file__).parent / "config.yaml")')" --prompt "hello"
+```
 
 ## Usage
 
@@ -68,7 +74,7 @@ for finding in result.results:
     if finding.flagged:
         print(finding.severity.name, finding.score, finding.findings)
 
-# or via config (dict form, see config.yaml)
+# or via config (dict form, see open_sorcerer/config.yaml)
 from open_sorcerer import SecurityPipeline
 pipeline = SecurityPipeline.from_config(config_dict)
 ```
@@ -155,7 +161,9 @@ pii.scan("My SSN is 123-45-6789.").flagged          # True
 pii.scan("My order number is 1234567890.").flagged  # False
 ```
 
-Loaded automatically via `SecurityPipeline.from_config` (see `config.yaml`).
+Loaded via `SecurityPipeline.from_config` (see `open_sorcerer/config.yaml`).
+An unknown detector name or an empty detector list raises rather than building
+a pipeline that inspects nothing.
 
 ## OWASP GenAI Top 10 coverage
 
