@@ -38,7 +38,7 @@ Detection layers:
 ## Install
 
 ```bash
-pip install -e ".[dev]"
+pip install open-sorcerer
 ```
 
 Runtime depends on `rich` (CLI output) and `PyYAML` (config files). `regex` is
@@ -184,6 +184,16 @@ Items without a mapped component are not covered by v0.1.
 | LLM10 | Unbounded consumption / DoS | Partial. `MAX_INPUT_LENGTH` and match-timeout guards bound the detector's own CPU cost. |
 
 ## Running the tests
+
+Tests need a checkout and the dev extras:
+
+```bash
+git clone https://github.com/jusot99/open-sorcerer
+cd open-sorcerer
+pip install -e ".[dev]"
+```
+
+Then:
 
 ```bash
 ruff check .               # lint

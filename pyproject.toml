@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "open-sorcerer"
-version = "0.1.0"
+version = "0.1.1"
 description = "Detects prompt injection, PII leakage, and unsafe outputs in AI applications."
 readme = "README.md"
 requires-python = ">=3.10"
