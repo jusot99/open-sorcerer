@@ -1,5 +1,10 @@
 """Unit tests for the pipeline."""
 
+from importlib.resources import files
+
+import pytest
+import yaml
+
 from open_sorcerer.detectors import PromptInjectionDetector
 from open_sorcerer.pipeline import SecurityPipeline
 
@@ -62,7 +67,24 @@ def test_from_config():
     assert len(p.detectors) == 2
 
 
-def test_from_config_disabled_detector_skipped():
+def test_from_config_with_every_detector_disabled_raises():
     cfg = {"detectors": {"prompt_injection": {"enabled": False}}}
-    p = SecurityPipeline.from_config(cfg)
-    assert len(p.detectors) == 0
+    with pytest.raises(ValueError, match="no detectors"):
+        SecurityPipeline.from_config(cfg)
+
+
+def test_from_config_without_detectors_key_raises():
+    with pytest.raises(ValueError, match="no detectors"):
+        SecurityPipeline.from_config({})
+
+
+def test_from_config_rejects_misspelled_detector_name():
+    cfg = {"detectors": {"prompt_injecton": {"enabled": True}}}
+    with pytest.raises(KeyError, match="unknown detector"):
+        SecurityPipeline.from_config(cfg)
+
+
+def test_reference_config_builds_full_pipeline():
+    raw = files("open_sorcerer").joinpath("config.yaml").read_text(encoding="utf-8")
+    p = SecurityPipeline.from_config(yaml.safe_load(raw))
+    assert len(p.detectors) == 5

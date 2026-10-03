@@ -89,10 +89,21 @@ class SecurityPipeline:
                 detectors.append(CanaryDetector(token_length=tl))
             elif name in cmap:
                 detectors.append(cmap[name](**params))
-            # unknown named detectors are ignored (fall through to extra)
+            else:
+                known = ", ".join(sorted(cmap))
+                raise KeyError(
+                    f"unknown detector {name!r} in config; "
+                    f"registered detectors: {known}"
+                )
 
         if extra_detectors:
             detectors.extend(extra_detectors)
+
+        if not detectors:
+            raise ValueError(
+                "config enables no detectors, so every input would pass; "
+                "enable at least one under 'detectors'"
+            )
 
         return cls(detectors, config)
 

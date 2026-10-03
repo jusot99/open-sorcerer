@@ -8,6 +8,10 @@ version = "0.1.0"
 description = "Detects prompt injection, PII leakage, and unsafe outputs in AI applications."
 readme = "README.md"
 requires-python = ">=3.10"
+dependencies = [
+    "rich>=13.0",
+    "PyYAML>=6.0",
+]
 license = { text = "MIT" }
 authors = []
 keywords = ["ai-security", "prompt-injection", "llm", "security", "llm-security"]
@@ -30,9 +34,7 @@ dev = [
     "ruff>=0.16,<0.17",
     "mypy>=1.9",
     "regex>=2023.0",
-    "PyYAML>=6.0",
     "types-PyYAML>=6.0",
-    "rich>=13.0",
     "langchain-core>=0.1",
 ]
 
@@ -42,6 +44,9 @@ open-sorcerer = "open_sorcerer.cli:main"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["open_sorcerer*"]
+
+[tool.setuptools.package-data]
+open_sorcerer = ["config.yaml", "py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
